@@ -2,7 +2,7 @@
 create extension vector;
 
 -- RUN 2nd
-create table tem (
+create table gs (
   id bigserial primary key,
   post_title text,
   post_url text,
@@ -15,7 +15,7 @@ create table tem (
 );
 
 -- RUN 3rd after running the scraping and embedding scripts
-create or replace function tem_search (
+create or replace function gs_search (
   query_embedding vector(1536),
   similarity_threshold float,
   match_count int
@@ -36,23 +36,23 @@ as $$
 begin
   return query
   select
-    tem.id,
-    tem.post_title,
-    tem.post_url,
-    tem.post_date,
-    tem.post_type,
-    tem.content,
-    tem.content_length,
-    tem.content_tokens,
-    1 - (tem.embedding <=> query_embedding) as similarity
-  from tem
-  where 1 - (tem.embedding <=> query_embedding) > similarity_threshold
-  order by tem.embedding <=> query_embedding
+    gs.id,
+    gs.post_title,
+    gs.post_url,
+    gs.post_date,
+    gs.post_type,
+    gs.content,
+    gs.content_length,
+    gs.content_tokens,
+    1 - (gs.embedding <=> query_embedding) as similarity
+  from gs
+  where 1 - (gs.embedding <=> query_embedding) > similarity_threshold
+  order by gs.embedding <=> query_embedding
   limit match_count;
 end;
 $$;
 
 -- RUN 4th
-create index on tem
+create index on gs
 using ivfflat (embedding vector_cosine_ops)
 with (lists = 100);

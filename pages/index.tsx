@@ -1,7 +1,7 @@
 import { Answer } from "@/components/Answer/Answer";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
-import { TEMChunk } from "@/types";
+import { GSChunk } from "@/types";
 import { getImage } from "@/utils/images";
 import { IconArrowRight, IconExternalLink, IconSearch } from "@tabler/icons-react";
 import endent from "endent";
@@ -13,7 +13,7 @@ export default function Home() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [query, setQuery] = useState<string>("");
-  const [chunks, setChunks] = useState<TEMChunk[]>([]);
+  const [chunks, setChunks] = useState<GSChunk[]>([]);
   const [answer, setAnswer] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -51,7 +51,7 @@ export default function Home() {
       throw new Error(searchResponse.statusText);
     }
 
-    const results: TEMChunk[] = await searchResponse.json();
+    const results: GSChunk[] = await searchResponse.json();
 
     setChunks(results);
 
@@ -89,7 +89,7 @@ export default function Home() {
       throw new Error(searchResponse.statusText);
     }
 
-    const results: TEMChunk[] = await searchResponse.json();
+    const results: GSChunk[] = await searchResponse.json();
 
     setChunks(results);
 
@@ -148,17 +148,17 @@ export default function Home() {
       return;
     }
 
-    localStorage.setItem("TEM_KEY", apiKey);
-    localStorage.setItem("TEM_MATCH_COUNT", matchCount.toString());
-    localStorage.setItem("TEM_MODE", mode);
+    localStorage.setIGS("GS_KEY", apiKey);
+    localStorage.setIGS("GS_MATCH_COUNT", matchCount.toString());
+    localStorage.setIGS("GS_MODE", mode);
 
     setShowSettings(false);
   };
 
   const handleClear = () => {
-    localStorage.removeItem("TEM_KEY");
-    localStorage.removeItem("TEM_MATCH_COUNT");
-    localStorage.removeItem("TEM_MODE");
+    localStorage.removeIGS("GS_KEY");
+    localStorage.removeIGS("GS_MATCH_COUNT");
+    localStorage.removeIGS("GS_MODE");
 
     setApiKey("");
     setMatchCount(5);
@@ -174,20 +174,20 @@ export default function Home() {
   }, [matchCount]);
 
   useEffect(() => {
-    const TEM_KEY = localStorage.getItem("TEM_KEY");
-    const TEM_MATCH_COUNT = localStorage.getItem("TEM_MATCH_COUNT");
-    const TEM_MODE = localStorage.getItem("TEM_MODE");
+    const GS_KEY = localStorage.getIGS("GS_KEY");
+    const GS_MATCH_COUNT = localStorage.getIGS("GS_MATCH_COUNT");
+    const GS_MODE = localStorage.getIGS("GS_MODE");
 
-    if (TEM_KEY) {
-      setApiKey(TEM_KEY);
+    if (GS_KEY) {
+      setApiKey(GS_KEY);
     }
 
-    if (TEM_MATCH_COUNT) {
-      setMatchCount(parseInt(TEM_MATCH_COUNT));
+    if (GS_MATCH_COUNT) {
+      setMatchCount(parseInt(GS_MATCH_COUNT));
     }
 
-    if (TEM_MODE) {
-      setMode(TEM_MODE as "search" | "chat");
+    if (GS_MODE) {
+      setMode(GS_MODE as "search" | "chat");
     }
   }, []);
 
@@ -212,9 +212,9 @@ export default function Home() {
       <div className="flex flex-col h-screen">
         <Navbar />
         <div className="flex-1 overflow-auto">
-          <div className="mx-auto flex h-full w-full max-w-[750px] flex-col items-center px-3 pt-4 sm:pt-8">
+          <div className="mx-auto flex h-full w-full max-w-[750px] flex-col iGSs-center px-3 pt-4 sm:pt-8">
             <button
-              className="mt-4 flex cursor-pointer items-center space-x-2 rounded-full border border-zinc-600 px-3 py-1 text-sm hover:opacity-50"
+              className="mt-4 flex cursor-pointer iGSs-center space-x-2 rounded-full border border-zinc-600 px-3 py-1 text-sm hover:opacity-50"
               onClick={() => setShowSettings(!showSettings)}
             >
               {showSettings ? "Hide" : "Show"} Settings
@@ -265,14 +265,14 @@ export default function Home() {
 
                 <div className="mt-4 flex space-x-2 justify-center">
                   <div
-                    className="flex cursor-pointer items-center space-x-2 rounded-full bg-green-500 px-3 py-1 text-sm text-white hover:bg-green-600"
+                    className="flex cursor-pointer iGSs-center space-x-2 rounded-full bg-green-500 px-3 py-1 text-sm text-white hover:bg-green-600"
                     onClick={handleSave}
                   >
                     Save
                   </div>
 
                   <div
-                    className="flex cursor-pointer items-center space-x-2 rounded-full bg-red-500 px-3 py-1 text-sm text-white hover:bg-red-600"
+                    className="flex cursor-pointer iGSs-center space-x-2 rounded-full bg-red-500 px-3 py-1 text-sm text-white hover:bg-red-600"
                     onClick={handleClear}
                   >
                     Clear
@@ -358,7 +358,7 @@ export default function Home() {
                     <div key={index}>
                       <div className="mt-4 border border-zinc-600 rounded-lg p-4">
                         <div className="flex justify-between">
-                          <div className="flex items-center">
+                          <div className="flex iGSs-center">
                             <Image
                               className="rounded-lg"
                               src={getImage(chunk.post_title)}
@@ -393,7 +393,7 @@ export default function Home() {
                   <div key={index}>
                     <div className="mt-4 border border-zinc-600 rounded-lg p-4">
                       <div className="flex justify-between">
-                        <div className="flex items-center">
+                        <div className="flex iGSs-center">
                           <Image
                             className="rounded-lg"
                             src={getImage(chunk.post_title)}

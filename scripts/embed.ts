@@ -2,11 +2,11 @@ import { loadEnvConfig } from "@next/env";
 import { createClient } from "@supabase/supabase-js";
 import fs from "fs";
 import { Configuration, OpenAIApi } from "openai";
-import { TEMJSON, TEMPost } from "../types/index";
+import { GSJSON, GSPost } from "../types/index";
 
 loadEnvConfig("");
 
-const generateEmbeddings = async (posts: TEMPost[]) => {
+const generateEmbeddings = async (posts: GSPost[]) => {
   const configuration = new Configuration({ apiKey: process.env.OPENAI_API_KEY });
   const openai = new OpenAIApi(configuration);
 
@@ -33,7 +33,7 @@ const generateEmbeddings = async (posts: TEMPost[]) => {
         const [{ embedding }] = embeddingResponse.data.data;
 
         const { data, error } = await supabase
-          .from("tem")
+          .from("gs")
           .insert({
             post_title,
             post_url,
@@ -61,7 +61,7 @@ const generateEmbeddings = async (posts: TEMPost[]) => {
 };
 
 (async () => {
-  const book: TEMJSON = JSON.parse(fs.readFileSync("scripts/tem.json", "utf8"));
+  const book: GSJSON = JSON.parse(fs.readFileSync("scripts/gs.json", "utf8"));
 
   await generateEmbeddings(book.posts);
 })();

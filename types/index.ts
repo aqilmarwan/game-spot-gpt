@@ -2,7 +2,7 @@ export enum OpenAIModel {
   DAVINCI_TURBO = "gpt-3.5-turbo"
 }
 
-export type TEMPost = {
+export type GSPost = {
   title: string;
   url: string;
   date: string;
@@ -10,10 +10,10 @@ export type TEMPost = {
   content: string;
   length: number;
   tokens: number;
-  chunks: TEMChunk[];
+  chunks: GSChunk[];
 };
 
-export type TEMChunk = {
+export type GSChunk = {
   post_title: string;
   post_url: string;
   post_date: string | undefined;
@@ -24,11 +24,11 @@ export type TEMChunk = {
   embedding: number[];
 };
 
-export type TEMJSON = {
+export type GSJSON = {
   current_date: string;
   author: string;
   url: string;
   length: number;
   tokens: number;
-  posts: TEMPost[];
+  posts: GSPost[];
 };

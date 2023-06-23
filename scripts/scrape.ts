@@ -1,4 +1,4 @@
-import { TEMChunk, TEMJSON, TEMPost } from "@/types";
+import { GSChunk, GSJSON, GSPost } from "@/types";
 import axios from "axios";
 import * as cheerio from "cheerio";
 import fs from "fs";
@@ -38,7 +38,7 @@ const getLinks = async (page: string, className: string) => {
 };
 
 const getPost = async (url: string, type: "post" | "mini") => {
-  let post: TEMPost = {
+  let post: GSPost = {
     title: "",
     url: "",
     date: "",
@@ -75,7 +75,7 @@ const getPost = async (url: string, type: "post" | "mini") => {
   return post;
 };
 
-const chunkPost = async (post: TEMPost) => {
+const chunkPost = async (post: GSPost) => {
   const { title, url, date, content } = post;
 
   let postTextChunks = [];
@@ -109,7 +109,7 @@ const chunkPost = async (post: TEMPost) => {
   const postChunks = postTextChunks.map((text) => {
     const trimmedText = text.trim();
 
-    const chunk: TEMChunk = {
+    const chunk: GSChunk = {
       post_title: title,
       post_url: url,
       post_date: date,
@@ -138,7 +138,7 @@ const chunkPost = async (post: TEMPost) => {
     }
   }
 
-  const chunkedSection: TEMPost = {
+  const chunkedSection: GSPost = {
     ...post,
     chunks: postChunks
   };
@@ -175,7 +175,7 @@ const chunkPost = async (post: TEMPost) => {
 
   const todayDate = new Date().toISOString().split("T")[0];
 
-  const json: TEMJSON = {
+  const json: GSJSON = {
     current_date: todayDate,
     author: "Tim Urban",
     url: BASE_URL,
@@ -184,5 +184,5 @@ const chunkPost = async (post: TEMPost) => {
     posts
   };
 
-  fs.writeFileSync("scripts/tem.json", JSON.stringify(json));
+  fs.writeFileSync("scripts/gs.json", JSON.stringify(json));
 })();
