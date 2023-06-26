@@ -27,18 +27,6 @@
   top: 0;
 }
 
-.main:after {
-  content: "";
-  background-image: url("/assets/images/grid.svg");
-  z-index: 1;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  opacity: 0.4;
-  filter: invert(1);
-}
-
 .gradient {
   height: fit-content;
   z-index: 3;
@@ -46,15 +34,12 @@
   max-width: 640px;
   background-image: radial-gradient(
       at 27% 37%,
-      hsla(215, 98%, 61%, 1) 0px,
+      rgb(0, 0, 0) 0px,
       transparent 0%
     ),
-    radial-gradient(at 97% 21%, rgb(89, 158, 95) 0px, transparent 50%),
-    radial-gradient(at 52% 99%, hsla(354, 98%, 61%, 1) 0px, transparent 50%),
-    radial-gradient(at 10% 29%, hsla(256, 96%, 67%, 1) 0px, transparent 50%),
-    radial-gradient(at 97% 96%, hsla(38, 60%, 74%, 1) 0px, transparent 50%),
-    radial-gradient(at 33% 50%, hsla(222, 67%, 73%, 1) 0px, transparent 50%),
-    radial-gradient(at 79% 53%, hsla(343, 68%, 79%, 1) 0px, transparent 50%);
+    radial-gradient(at 52% 99%, rgb(132, 0, 255) 0px, transparent 50%),
+    radial-gradient(at 10% 29%, rgb(68, 0, 255) 0px, transparent 50%),
+    radial-gradient(at 33% 50%, rgb(255, 0, 212) 0px, transparent 50%);
   position: absolute;
   content: "";
   width: 100%;
@@ -85,7 +70,7 @@
 }
 
 .head_text {
-  @apply mt-5 text-5xl font-extrabold leading-[1.15] text-black sm:text-5xl;
+  @apply mt-5 text-5xl font-bold leading-[1.15] text-black sm:text-5xl;
 }
 
 .orange_gradient {
@@ -113,7 +98,7 @@
 }
 
 .glassmorphism {
-  @apply rounded-xl border border-gray-200 bg-white/20 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur p-5;
+  @apply rounded-xl border border-gray-200 bg-white/20 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] p-5;
 }
 
 .prompt_layout {

@@ -2,20 +2,20 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 import fs from "fs";
 
-const BASE_URL = "https://waitbutwhy.com";
+const BASE_URL = "https://www.gamespot.com";
 
-const ARCHIVE_PAGE_1 = "/archive";
-const ARCHIVE_PAGE_2 = "/archive/page/2";
-const ARCHIVE_CLASS = ".post-list";
+const NEWS_PAGE_1 = "/news/";
+const NEWS_PAGE_2 = "/news/?page=2";
+const NEWS_CLASS = ".news.page";
 
-const MINIS_PAGE_1 = "/minis";
-const MINIS_PAGE_2 = "/minis/page/2";
+const GAMES_REVIEWS_PAGE_1 = "/games/reviews/";
+const GAMES_REVIEWS_PAGE_2 = "/games/reviews/?page=2";
 
-const getArchiveImages = async (page: string) => {
+const getNewsImages = async (page: string) => {
   const fullLink = BASE_URL + page;
   const html = await axios.get(fullLink);
   const $ = cheerio.load(html.data);
-  const list = $(ARCHIVE_CLASS);
+  const list = $(NEWS_CLASS);
   const firstList = list.first();
   const li = firstList.find("li");
 
@@ -33,7 +33,7 @@ const getArchiveImages = async (page: string) => {
   return images;
 };
 
-const getMinisImages = async (page: string) => {
+const getGamesReviewsImages = async (page: string) => {
   const fullLink = BASE_URL + page;
   const html = await axios.get(fullLink);
   const $ = cheerio.load(html.data);
@@ -56,13 +56,13 @@ const getMinisImages = async (page: string) => {
 (async () => {
   let images: { title: string; src: string }[] = [];
 
-  const archivePage1Images = await getArchiveImages(ARCHIVE_PAGE_1);
-  const archivePage2Images = await getArchiveImages(ARCHIVE_PAGE_2);
+  const newsPage1Images = await getNewsImages(NEWS_PAGE_1);
+  const newsPage2Images = await getNewsImages(NEWS_PAGE_2);
 
-  const minisPage1Images = await getMinisImages(MINIS_PAGE_1);
-  const minisPage2Images = await getMinisImages(MINIS_PAGE_2);
+  const gamesreviewsPage1Images = await getGamesReviewsImages(GAMES_REVIEWS_PAGE_1);
+  const gamesreviewsPage2Images = await getGamesReviewsImages(GAMES_REVIEWS_PAGE_2);
 
-  images = [...archivePage1Images, ...archivePage2Images, ...minisPage1Images, ...minisPage2Images];
+  images = [...newsPage1Images, ...newsPage2Images, ...gamesreviewsPage1Images, ...gamesreviewsPage2Images];
 
   console.log(images);
   console.log(images.length);

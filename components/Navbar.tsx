@@ -8,7 +8,7 @@ export const Navbar: FC = () => {
       <div className="font-bold text-2xl flex items-center">
         <a
           className="flex hover:opacity-50 items-center"
-          href="https://wait-but-why-gpt.vercel.app"
+          href="#"
         >
           <Image
             src={gamespot}
@@ -24,8 +24,10 @@ export const Navbar: FC = () => {
           target="_blank"
           rel="noreferrer"
         >
-          <div>Visit GameSpot</div>
-
+          <span className="pr-2">Visit GameSpot {" "}</span>
+          <div>
+            <span aria-hidden="true">&rarr;</span>
+          </div>
         </a>
       </div>
     </div>

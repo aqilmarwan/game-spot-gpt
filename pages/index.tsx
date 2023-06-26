@@ -217,11 +217,15 @@ export default function Home() {
               className="mt-4 flex cursor-pointer items-center space-x-2 rounded-full border border-zinc-600 px-3 py-1 text-sm hover:opacity-50"
               onClick={() => setShowSettings(!showSettings)}
             >
-              {showSettings ? "Hide" : "Show"} Settings
+              <span>Settings{" "}</span>
+              <span className="font-semibold text-red-600">
+                Enter OpenAI API Key{" "}
+                <span aria-hidden="true">&rarr;</span>
+              </span>
             </button>
 
             {showSettings && (
-              <div className="w-[340px] sm:w-[400px]">
+              <div className="glassmorphism w-[340px] sm:w-[400px]">
                 <div>
                   <div>Mode</div>
                   <select

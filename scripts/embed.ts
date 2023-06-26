@@ -20,7 +20,15 @@ const generateEmbeddings = async (posts: GSPost[]) => {
     for (let j = 0; j < section.chunks.length; j++) {
       const chunk = section.chunks[j];
 
-      const { post_title, post_url, post_date, post_type, content, content_length, content_tokens } = chunk;
+      const { 
+        post_title, 
+        post_url, 
+        post_date, 
+        post_type, 
+        content, 
+        content_length, 
+        content_tokens 
+      } = chunk;
 
       const embeddingResponse = await openai.createEmbedding({
         model: "text-embedding-ada-002",

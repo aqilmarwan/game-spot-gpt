@@ -1,18 +1,16 @@
-import { GSChunk, GSJSON, GSPost } from "@/types";
 import axios from "axios";
 import * as cheerio from "cheerio";
 import fs from "fs";
 import { encode } from "gpt-3-encoder";
+import { GSChunk, GSJSON, GSPost } from "@/types";
 
-const BASE_URL = "https://waitbutwhy.com";
+const BASE_URL = "https://www.gamespot.com";
 
-const ARCHIVE_PAGE_1 = "/archive";
-const ARCHIVE_PAGE_2 = "/archive/page/2";
-const ARCHIVE_CLASS = ".archive-page";
+const NEWS_PAGE_1 = "/news/";
+const NEWS_CLASS = ".news.page";
 
-const MINIS_PAGE_1 = "/minis";
-const MINIS_PAGE_2 = "/minis/page/2";
-const MINIS_CLASS = ".archive-postlist";
+const GAMES_REVIEWS_PAGE_1 = "/games/reviews/";
+const GAMES_REVIEWS_CLASS = ".archive-postlist";
 
 const CHUNK_SIZE = 200;
 
@@ -31,10 +29,9 @@ const getLinks = async (page: string, className: string) => {
       links.push(href);
     }
   });
-
-  const filteredLinks = [...new Set(links.filter((link) => link.endsWith(".html")))];
-
-  return filteredLinks;
+  
+  console.log(links);
+  return links;
 };
 
 const getPost = async (url: string, type: "post" | "mini") => {
@@ -52,7 +49,7 @@ const getPost = async (url: string, type: "post" | "mini") => {
   const html = await axios.get(url);
   const $ = cheerio.load(html.data);
 
-  const title = $("header h1").text().trim();
+  const title = $("div h1").text().trim();
   const date = $("header .date").text().trim();
   const text = $(".entry-content #pico").text().trim();
 
@@ -147,26 +144,24 @@ const chunkPost = async (post: GSPost) => {
 };
 
 (async () => {
-  const archivePage1Links = await getLinks(ARCHIVE_PAGE_1, ARCHIVE_CLASS);
-  const archivePage2Links = await getLinks(ARCHIVE_PAGE_2, ARCHIVE_CLASS);
-  const archiveLinks = [...archivePage1Links, ...archivePage2Links];
+  const newsPage1Links = await getLinks(NEWS_PAGE_1, NEWS_CLASS);
+  const newsLinks = [...newsPage1Links ];
 
   let posts = [];
 
-  for (let i = 0; i < archiveLinks.length; i++) {
-    const link = archiveLinks[i];
+  for (let i = 0; i < newsLinks.length; i++) {
+    const link = newsLinks[i];
     const post = await getPost(link, "post");
     const chunkedPost = await chunkPost(post);
 
     posts.push(chunkedPost);
   }
 
-  const minisPage1Links = await getLinks(MINIS_PAGE_1, MINIS_CLASS);
-  const minisPage2Links = await getLinks(MINIS_PAGE_2, MINIS_CLASS);
-  const minisLinks = [...minisPage1Links, ...minisPage2Links];
+  const gamesreviewsPage1Links = await getLinks(GAMES_REVIEWS_PAGE_1, GAMES_REVIEWS_CLASS);
+  const gamesreviewsLinks = [...gamesreviewsPage1Links ];
 
-  for (let i = 0; i < minisLinks.length; i++) {
-    const link = minisLinks[i];
+  for (let i = 0; i < gamesreviewsLinks.length; i++) {
+    const link = gamesreviewsLinks[i];
     const post = await getPost(link, "mini");
     const chunkedPost = await chunkPost(post);
 
@@ -177,12 +172,13 @@ const chunkPost = async (post: GSPost) => {
 
   const json: GSJSON = {
     current_date: todayDate,
-    author: "Tim Urban",
-    url: BASE_URL,
+    url: "https://www.gamespot.com",
     length: posts.reduce((acc, essay) => acc + essay.length, 0),
     tokens: posts.reduce((acc, essay) => acc + essay.tokens, 0),
     posts
   };
 
+  console.log("Writing to JSON file at scripts/gs.json...");
   fs.writeFileSync("scripts/gs.json", JSON.stringify(json));
+  console.log("Done!");
 })();

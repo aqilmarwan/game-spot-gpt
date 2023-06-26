@@ -26,7 +26,6 @@ export type GSChunk = {
 
 export type GSJSON = {
   current_date: string;
-  author: string;
   url: string;
   length: number;
   tokens: number;
