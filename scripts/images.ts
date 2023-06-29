@@ -6,7 +6,6 @@ const BASE_URL = "https://www.gamespot.com";
 
 const NEWS_PAGE_1 = "/news/";
 const NEWS_PAGE_2 = "/news/?page=2";
-const NEWS_CLASS = ".news.page";
 
 const GAMES_REVIEWS_PAGE_1 = "/games/reviews/";
 const GAMES_REVIEWS_PAGE_2 = "/games/reviews/?page=2";
@@ -15,14 +14,12 @@ const getNewsImages = async (page: string) => {
   const fullLink = BASE_URL + page;
   const html = await axios.get(fullLink);
   const $ = cheerio.load(html.data);
-  const list = $(NEWS_CLASS);
-  const firstList = list.first();
-  const li = firstList.find("li");
+  const li = $("div.card-item");
 
   let images: { title: string; src: string }[] = [];
 
   li.each((i, li) => {
-    const title = $(li).find("h5").text().trim();
+    const title = $(li).find("h4.card-item__title").text().trim();
     const src = $(li).find("img").attr("src");
 
     if (title && src) {
@@ -30,6 +27,7 @@ const getNewsImages = async (page: string) => {
     }
   });
 
+  console.log("GameSpot News Images" + images);
   return images;
 };
 
@@ -37,19 +35,19 @@ const getGamesReviewsImages = async (page: string) => {
   const fullLink = BASE_URL + page;
   const html = await axios.get(fullLink);
   const $ = cheerio.load(html.data);
-  const oneHalf = $(".one-half");
+  const oneHalf = $("div.card-item");
 
   let images: { title: string; src: string }[] = [];
 
   oneHalf.each((i, el) => {
-    const title = $(el).find("h3").text().trim();
+    const title = $(el).find("h4.card-item__title").text().trim();
     const src = $(el).find("img").attr("src");
 
     if (title && src) {
       images.push({ title, src });
     }
   });
-
+  console.log("GameSpot Reviews Images" + images);
   return images;
 };
 

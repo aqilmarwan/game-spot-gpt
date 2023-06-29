@@ -6,7 +6,6 @@ export type GSPost = {
   title: string;
   url: string;
   date: string;
-  type: "post" | "mini";
   content: string;
   length: number;
   tokens: number;
@@ -17,7 +16,6 @@ export type GSChunk = {
   post_title: string;
   post_url: string;
   post_date: string | undefined;
-  post_type: "post" | "mini";
   content: string;
   content_length: number;
   content_tokens: number;

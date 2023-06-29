@@ -23,8 +23,7 @@ const generateEmbeddings = async (posts: GSPost[]) => {
       const { 
         post_title, 
         post_url, 
-        post_date, 
-        post_type, 
+        post_date,
         content, 
         content_length, 
         content_tokens 
@@ -46,7 +45,6 @@ const generateEmbeddings = async (posts: GSPost[]) => {
             post_title,
             post_url,
             post_date,
-            post_type,
             content,
             content_length,
             content_tokens,
