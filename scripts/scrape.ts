@@ -1,45 +1,45 @@
+import { GSChunk, GSJSON, GSPost } from "@/types";
 import axios from "axios";
 import * as cheerio from "cheerio";
 import fs from "fs";
 import { encode } from "gpt-3-encoder";
-import { GSChunk, GSJSON, GSPost } from "@/types";
 
-const BASE_URL = "https://www.gamespot.com";
+const BASE_URL = "https://gamespot.com";
 
 const NEWS_PAGE_1 = "/news/";
-const NEWS_CLASS = ".news.page";
+const NEWS_PAGE_2 = "/news/?page=2";
 
-const GAMES_REVIEWS_PAGE_1 = "/games/reviews/";
-const GAMES_REVIEWS_CLASS = ".archive-postlist";
+const REVIEWS_PAGE_1 = "/games/reviews/";
+const REVIEWS_PAGE_2 = "/games/reviews/?page=2";
 
 const CHUNK_SIZE = 200;
 
-const getLinks = async (page: string, className: string) => {
+const getLinks = async (page: string) => {
+  console.log("Scraping GameSpot...");
   const fullLink = BASE_URL + page;
   const html = await axios.get(fullLink);
   const $ = cheerio.load(html.data);
-  const list = $(className);
+  const list = $("div.card-item__content");
 
   const links: string[] = [];
 
-  list.find("a").map((i, link) => {
-    const href = $(link).attr("href");
-
+  list.each((i, link) => {
+    const href = $(link).find("a.card-item__link").attr("href");
+  
     if (href) {
-      links.push(href);
+      links.push(BASE_URL + href);
     }
   });
-  
-  console.log(links);
+
+  console.log("GameSpot Links\n" + links)
   return links;
 };
 
-const getPost = async (url: string, type: "post" | "mini") => {
+const getPost = async (url: string) => {
   let post: GSPost = {
     title: "",
     url: "",
     date: "",
-    type,
     content: "",
     length: 0,
     tokens: 0,
@@ -49,9 +49,11 @@ const getPost = async (url: string, type: "post" | "mini") => {
   const html = await axios.get(url);
   const $ = cheerio.load(html.data);
 
-  const title = $("div h1").text().trim();
-  const date = $("header .date").text().trim();
-  const text = $(".entry-content #pico").text().trim();
+  const title = $("article h1" || "body h1").text().trim();
+  const date = $("article time").text().trim();
+  const text = $("div .js-content-entity-body").text().trim();
+
+  console.log("title " + title, "date " + date);
 
   let cleanedText = text.replace(/\s+/g, " ");
   cleanedText = cleanedText.replace(/\.([a-zA-Z])/g, ". $1");
@@ -62,7 +64,6 @@ const getPost = async (url: string, type: "post" | "mini") => {
     title,
     url,
     date,
-    type,
     content: trimmedContent,
     length: trimmedContent.length,
     tokens: encode(trimmedContent).length,
@@ -110,7 +111,6 @@ const chunkPost = async (post: GSPost) => {
       post_title: title,
       post_url: url,
       post_date: date,
-      post_type: post.type,
       content: trimmedText,
       content_length: trimmedText.length,
       content_tokens: encode(trimmedText).length,
@@ -144,25 +144,27 @@ const chunkPost = async (post: GSPost) => {
 };
 
 (async () => {
-  const newsPage1Links = await getLinks(NEWS_PAGE_1, NEWS_CLASS);
-  const newsLinks = [...newsPage1Links ];
+  const newspage1Links = await getLinks(NEWS_PAGE_1);
+  const newspage2Links = await getLinks(NEWS_PAGE_2);
+  const newsLinks = [...newspage1Links, ...newspage2Links];
 
   let posts = [];
 
   for (let i = 0; i < newsLinks.length; i++) {
     const link = newsLinks[i];
-    const post = await getPost(link, "post");
+    const post = await getPost(link);
     const chunkedPost = await chunkPost(post);
 
     posts.push(chunkedPost);
   }
 
-  const gamesreviewsPage1Links = await getLinks(GAMES_REVIEWS_PAGE_1, GAMES_REVIEWS_CLASS);
-  const gamesreviewsLinks = [...gamesreviewsPage1Links ];
+  const reviewsPage1Links = await getLinks(REVIEWS_PAGE_1);
+  const reviewsPage2Links = await getLinks(REVIEWS_PAGE_2);
+  const reviewsLinks = [...reviewsPage1Links, ...reviewsPage2Links];
 
-  for (let i = 0; i < gamesreviewsLinks.length; i++) {
-    const link = gamesreviewsLinks[i];
-    const post = await getPost(link, "mini");
+  for (let i = 0; i < reviewsLinks.length; i++) {
+    const link = reviewsLinks[i];
+    const post = await getPost(link);
     const chunkedPost = await chunkPost(post);
 
     posts.push(chunkedPost);
@@ -172,13 +174,13 @@ const chunkPost = async (post: GSPost) => {
 
   const json: GSJSON = {
     current_date: todayDate,
-    url: "https://www.gamespot.com",
+    url: BASE_URL,
     length: posts.reduce((acc, essay) => acc + essay.length, 0),
     tokens: posts.reduce((acc, essay) => acc + essay.tokens, 0),
     posts
   };
 
-  console.log("Writing to JSON file at scripts/gs.json...");
+  console.log("Writing to JSON gs.json");
   fs.writeFileSync("scripts/gs.json", JSON.stringify(json));
   console.log("Done!");
 })();
