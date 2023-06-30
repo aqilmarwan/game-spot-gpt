@@ -87,6 +87,6 @@ export const getImage = (title: string) => {
   if (match) {
     return match.src;
   } else {
-    return "https://images.pico.tools/production/waitbutwhy_logo_503.png";
+    return "https://e7.pngegg.com/pngimages/656/119/png-clipart-mobile-phones-telephone-gamespot-logo-text-telephone-call.png";
   }
 };
