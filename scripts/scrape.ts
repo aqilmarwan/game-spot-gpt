@@ -4,7 +4,7 @@ import * as cheerio from "cheerio";
 import fs from "fs";
 import { encode } from "gpt-3-encoder";
 
-const BASE_URL = "https://gamespot.com";
+const BASE_URL = "https://www.gamespot.com";
 
 const NEWS_PAGE_1 = "/news/";
 const NEWS_PAGE_2 = "/news/?page=2";
@@ -31,7 +31,6 @@ const getLinks = async (page: string) => {
     }
   });
 
-  console.log("GameSpot Links\n" + links)
   return links;
 };
 
@@ -49,11 +48,9 @@ const getPost = async (url: string) => {
   const html = await axios.get(url);
   const $ = cheerio.load(html.data);
 
-  const title = $("article h1" || "body h1").text().trim();
+  const title = $("article h1").text().trim() || $("div .kubrick-info__title").text().trim();
   const date = $("article time").text().trim();
   const text = $("div .js-content-entity-body").text().trim();
-
-  console.log("title " + title, "date " + date);
 
   let cleanedText = text.replace(/\s+/g, " ");
   cleanedText = cleanedText.replace(/\.([a-zA-Z])/g, ". $1");
@@ -180,7 +177,7 @@ const chunkPost = async (post: GSPost) => {
     posts
   };
 
-  console.log("Writing to JSON gs.json");
+  console.log("Writing to gs.json...");
   fs.writeFileSync("scripts/gs.json", JSON.stringify(json));
   console.log("Done!");
 })();

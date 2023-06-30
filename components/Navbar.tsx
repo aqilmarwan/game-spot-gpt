@@ -8,7 +8,7 @@ export const Navbar: FC = () => {
       <div className="font-bold text-2xl flex items-center">
         <a
           className="flex hover:opacity-50 items-center"
-          href="#"
+          href="https://gamespot-gpt.vercel.app"
         >
           <Image
             src={gamespot}
@@ -20,7 +20,7 @@ export const Navbar: FC = () => {
       <div>
         <a
           className="flex items-center hover:opacity-50"
-          href="https://www.gamespot.com"
+          href="https://www.gamespot-gpt.com"
           target="_blank"
           rel="noreferrer"
         >
