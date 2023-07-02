@@ -20,7 +20,7 @@ export const Navbar: FC = () => {
       <div>
         <a
           className="flex items-center hover:opacity-50"
-          href="https://www.gamespot-gpt.com"
+          href="https://www.gamespot.com"
           target="_blank"
           rel="noreferrer"
         >
