@@ -299,7 +299,7 @@ export default function Home() {
                     ref={inputRef}
                     className="h-12 w-full rounded-full border border-zinc-600 pr-12 pl-11 focus:border-zinc-800 focus:outline-none focus:ring-1 focus:ring-zinc-800 sm:h-16 sm:py-2 sm:pr-16 sm:pl-16 sm:text-lg"
                     type="text"
-                    placeholder="When will the Final Fantasy 16 released?"
+                    placeholder="When will the Star Wars Eclipse released?"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     onKeyDown={handleKeyDown}
