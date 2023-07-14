@@ -8,7 +8,7 @@ AI-powered search and chat for Game Spot.
 
 The dataset is a CSV file containing all text & embeddings used.
 
-Download it [here](https://drive.google.com/file/d/12xFH1bCqjek9owhNuoiB9HPVDgbQZ-ik/view?usp=sharing).
+Download it [here](https://docs.google.com/spreadsheets/d/1WxmHtnYqtDw3vHrGh8V5w5yM1guakJwXe4t7oktLzXE/edit?usp=sharing).
 
 I recommend getting familiar with fetching, cleaning, and storing data as outlined in the scraping and embedding scripts below, but feel free to skip those steps and just use the dataset.
 
