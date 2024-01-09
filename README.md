@@ -120,6 +120,10 @@ Thanks to [Mc Kay Wrigley](https://github.com/mckaywrigley) for his Wait But Why
 
 ## Notes
 
+```bash
+Project Status : 🚧 This Project is curently unmonitored.
+```
+
 I sacrificed composability for simplicity in the app.
 
 Yes, you can make things more modular and reusable.
